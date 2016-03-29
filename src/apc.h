@@ -38,7 +38,7 @@ namespace {
 	void setMethod(Handle<Object>& classObj, wstring&& funcName, const T&& callback) {
 		Isolate* isolate = Isolate::GetCurrent(); HandleScope scope(isolate);
 		auto funcTemplate = FunctionTemplate::New(isolate, static_cast<FunctionCallback>(callback));
-		auto fn_name = String::NewFromTwoByte(isolate, reinterpret_cast<const uint16_t *>(funcName.data()), String::kInternalizedString, funcName.size());
+		auto fn_name = String::NewFromTwoByte(isolate, reinterpret_cast<const uint16_t *>(funcName.data()), String::kInternalizedString, SafeInt<int>(funcName.size()));
 		funcTemplate->SetClassName(fn_name);
 		auto func = funcTemplate->GetFunction();
 		func->SetName(fn_name);

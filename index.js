@@ -1,5 +1,7 @@
 "use strict";
 
+const stream = require('stream');
+
 function loadBinding() {
 	try {
 		return require('./build/Release/binding.node');
@@ -21,3 +23,37 @@ Object.defineProperties(Object.getPrototypeOf(Object.getPrototypeOf(module.expor
 		return Object.assign({"type": "ForeignAPC"}, this);
 	}}
 });
+
+module.exports.ReadableAPC = class ReadableAPC extends stream.Readable {
+	constructor(options) {
+		super(Object.assign({"objectMode": true}, options));
+		this.userAPC = new module.exports.APC((function(num) {
+			this.push(num);
+		}).bind(this));
+	}
+
+	_read(size) {
+		module.exports.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
+	}
+
+	toJSON() {
+		return Object.assign({"type": "ReadableAPC"}, this.userAPC);
+	}
+};
+
+module.exports.WritableAPC = class WritableAPC extends stream.Writable {
+	constructor(options) {
+		super(Object.assign({"objectMode": true}, options));
+		this.userAPC = new module.exports.ForeignAPC({threadId: options.threadId, addrOfAPC: options.addrOfAPC});
+	}
+
+	_write(chunk, encoding, callback) {
+		this.userAPC.queue(chunk);
+		callback();
+	}
+
+	toJSON() {
+		return Object.assign({"type": "WritableAPC"}, this.userAPC);
+	}
+
+};
