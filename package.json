@@ -1,0 +1,15 @@
+{
+  "name": "apc",
+  "version": "0.0.1",
+  "description": "apc",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codepilot/apc.git"
+  },
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
