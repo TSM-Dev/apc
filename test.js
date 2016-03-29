@@ -43,6 +43,6 @@ if (cluster.isMaster) {
 	})
 }
 
-setTimeout(function() {
-	apc.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
-}, 1000);
+//setTimeout(function() {
+//	apc.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
+//}, 1000);

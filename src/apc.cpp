@@ -36,7 +36,9 @@ namespace {
 		v8::Isolate* isolate = v8::Isolate::GetCurrent(); v8::HandleScope scope(isolate);
 		class_APC::Init(target);
 
+#if 0 //needs to be 1 if libuv support for alertable uv_poll_ex is missing
 		makeMethodRet(target, DequeueAPCs, static_cast<uint32_t>(SleepEx(0, TRUE)));
+#endif
 
 		makeMethod(target, SleepEx, {
 			switch (info.Length()) {

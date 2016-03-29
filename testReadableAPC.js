@@ -40,10 +40,16 @@ if (cluster.isMaster) {
 		console.log('worker got message', message);
 		const masterAPC = new apc.WritableAPC(message);
 		masterAPC.write(5);
+		masterAPC.cork();
+		masterAPC.write(6);
+		masterAPC.write(7);
+		masterAPC.write(8);
+		masterAPC.uncork();
+		masterAPC.write(9);
 	});
 
 }
 
-setTimeout(function() {
-	apc.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
-}, 1000);
+//setTimeout(function() {
+//	apc.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
+//}, 1000);

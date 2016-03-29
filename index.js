@@ -33,7 +33,7 @@ module.exports.ReadableAPC = class ReadableAPC extends stream.Readable {
 	}
 
 	_read(size) {
-		module.exports.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
+		//module.exports.DequeueAPCs(); //this part not needed if libuv modified for GetQueuedCompletionStatusEx(fAlertable: TRUE)
 	}
 
 	toJSON() {
@@ -49,6 +49,14 @@ module.exports.WritableAPC = class WritableAPC extends stream.Writable {
 
 	_write(chunk, encoding, callback) {
 		this.userAPC.queue(chunk);
+		callback();
+	}
+
+	_writev(chunks, callback) {
+		const chunks_length = chunks.length;
+		for(let chunkNum = 0; chunkNum < chunks_length; chunkNum++) {
+			this.userAPC.queue(chunks[chunkNum].chunk);
+		}
 		callback();
 	}
 
