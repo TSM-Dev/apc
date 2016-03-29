@@ -18,6 +18,5 @@ module.exports.ForeignAPC = class ForeignAPC extends module.exports.APC {
 
 Object.defineProperties(Object.getPrototypeOf(Object.getPrototypeOf(module.exports.APC)), {
 	toJSON: {value: function() {
-		return Object.assign({}, this);
 	}}
 });
